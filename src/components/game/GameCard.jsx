@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 
-import "./card.css";
+import "./GameCard.css";
 
-const Card = ({ card, handleChoice, flipped, disabled }) => {
+const GameCard = ({ card, handleChoice, flipped, disabled }) => {
   const handleClick = () => {
     if (!disabled) {
       handleChoice(card);
@@ -23,4 +23,4 @@ const Card = ({ card, handleChoice, flipped, disabled }) => {
   );
 };
 
-export default Card;
+export default GameCard;
