@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useGlobalAudioPlayer } from "react-use-audio-player";
+
 import GameCard from "../components/game/GameCard";
-import { getUsername, isLoggedIn } from "../hooks/auth";
+import { getUsername } from "../hooks/auth";
 
 const cardImages = [
   { src: "/src/assets/helmet-1.png", matched: false },
@@ -12,13 +14,22 @@ const cardImages = [
 ];
 
 function Game() {
+  // card data
   const [cards, setCards] = useState([]);
 
+  // choices
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
+  // disabled to make another cards disabled when user have two choice selected
   const [disabled, setDisabled] = useState(false);
-  const [score, setScore] = useState(50);
+  // user data
   const [user, setUser] = useState("");
+
+  const { load } = useGlobalAudioPlayer();
+
+  const [remainingTime, setRemainingTime] = useState(60); // Start from 60 seconds (1 minute)
+  const [isGameComplete, setIsGameComplete] = useState(false);
+  const [allMatched, setAllMatched] = useState(false);
 
   // shuffle cards
   const shuffleCards = () => {
@@ -32,51 +43,88 @@ function Game() {
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
 
+    setIsGameComplete(false);
     setChoiceOne(null);
     setChoiceTwo(null);
 
     setCards(shuffledCards);
   };
-
   // start new game automatically
   useEffect(() => {
     shuffleCards();
   }, []);
 
   useEffect(() => {
+    if (allMatched) {
+      // if all the matched true with map then setIsGame to true
+      const allMatched = cards.every((card) => card.matched === true);
+
+      if (allMatched) {
+        setIsGameComplete(true);
+        load("/src/components/game/Win.mp3", {
+          autoplay: true,
+        });
+      }
+    }
+
+    if (!isGameComplete && remainingTime === 0) {
+      // Time is up sound
+      load("/src/components/game/Wasted.mp3", {
+        autoplay: true,
+      });
+    }
+  }, [remainingTime]);
+
+  const resetGame = () => {
+    shuffleCards();
+    location.reload();
+  };
+
+  useEffect(() => {
+    let timer;
+
+    if (!isGameComplete) {
+      timer = setInterval(() => {
+        setRemainingTime((prevTime) => {
+          if (prevTime === 1) {
+            // Time is up
+
+            clearInterval(timer);
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+
+    // Clean up the timer when the component unmounts or when the game is complete
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isGameComplete]);
+
+  useEffect(() => {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
       if (choiceOne.src === choiceTwo.src) {
         setCards((prev) => {
-          return prev.map((card) => {
+          const updateCard = prev.map((card) => {
             if (card.src === choiceOne.src) {
               return { ...card, matched: true };
             } else {
               return card;
             }
           });
+          setAllMatched(updateCard);
+          return updateCard;
         });
-        cardScore(true);
         resetTurn();
       } else {
         setTimeout(() => {
-          cardScore();
           resetTurn();
         }, 1000);
       }
     }
   }, [choiceOne, choiceTwo]);
-
-  const cardScore = (match) => {
-    // Check if two cards are matched
-    if (match) {
-      // Increase the score if cards are matched
-      setScore(score + 10);
-    } else {
-      // Deduct points for each turn
-      setScore(score - 5);
-    }
-  };
 
   // handle choice
   const handleChoice = (card) => {
@@ -97,14 +145,23 @@ function Game() {
     <div className="max-w-4xl max-md:max-w-[92%] flex flex-col justify-center items-center my-10 mx-auto ">
       <div className="flex justify-center items-center w-full space-x-12">
         <button
-          onClick={shuffleCards}
-          className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
+          onClick={resetGame}
+          className="bg-none max-xs:w-full inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
         >
           New Game
         </button>
-        {isLoggedIn && (
-          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 ">
-            {`${user}'s score: ${score}`}
+
+        {remainingTime === 0 ? (
+          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+            Oops! Time&#8217;s up, {user}.
+          </p>
+        ) : isGameComplete ? (
+          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+            Yay! You won, {user}! 🎉
+          </p>
+        ) : (
+          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+            {remainingTime} secs left! Go, Mohammed! 💪
           </p>
         )}
       </div>
