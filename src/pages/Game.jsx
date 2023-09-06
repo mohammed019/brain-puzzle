@@ -5,12 +5,15 @@ import GameCard from "../components/game/GameCard";
 import { getUsername } from "../hooks/auth";
 
 const cardImages = [
-  { src: "/src/assets/helmet-1.png", matched: false },
-  { src: "/src/assets/potion-1.png", matched: false },
-  { src: "/src/assets/ring-1.png", matched: false },
-  { src: "/src/assets/scroll-1.png", matched: false },
-  { src: "/src/assets/shield-1.png", matched: false },
-  { src: "/src/assets/sword-1.png", matched: false },
+  { src: "/src/assets/Burger_Final.png", matched: false },
+  { src: "/src/assets//Donut.png", matched: false },
+  { src: "/src/assets/Drumstick.png", matched: false },
+  { src: "/src/assets/Fries.png", matched: false },
+  { src: "/src/assets/Glass_Drink.png", matched: false },
+  { src: "/src/assets/Hot Dog.png", matched: false },
+  { src: "/src/assets/Soda_Can.png", matched: false },
+  { src: "/src/assets/Soda_Cup.png", matched: false },
+  { src: "/src/assets/Sandwich.png", matched: false },
 ];
 
 function Game() {
@@ -30,16 +33,12 @@ function Game() {
   const [remainingTime, setRemainingTime] = useState(60); // Start from 60 seconds (1 minute)
   const [isGameComplete, setIsGameComplete] = useState(false);
   const [allMatched, setAllMatched] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
 
   // shuffle cards
   const shuffleCards = () => {
     // duplicate cards
-    const shuffledCards = [
-      ...cardImages,
-      ...cardImages,
-      ...cardImages,
-      ...cardImages,
-    ]
+    const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
 
@@ -81,26 +80,16 @@ function Game() {
   };
 
   useEffect(() => {
-    let timer;
-
-    if (!isGameComplete) {
-      timer = setInterval(() => {
-        setRemainingTime((prevTime) => {
-          if (prevTime === 1) {
-            // Time is up
-
-            clearInterval(timer);
-          }
-          return prevTime - 1;
-        });
+    if (isStarted) {
+      const interval = setInterval(() => {
+        setRemainingTime(remainingTime - 1);
       }, 1000);
-    }
 
-    // Clean up the timer when the component unmounts or when the game is complete
-    return () => {
-      clearInterval(timer);
-    };
-  }, [isGameComplete]);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [isStarted, remainingTime]);
 
   useEffect(() => {
     if (choiceOne && choiceTwo) {
@@ -141,6 +130,10 @@ function Game() {
     setDisabled(false);
   };
 
+  const handleStart = () => {
+    setIsStarted(true);
+  };
+
   return (
     <div className="max-w-4xl max-md:max-w-[92%] flex flex-col justify-center items-center my-10 mx-auto ">
       <div className="flex justify-center items-center w-full space-x-12">
@@ -151,12 +144,25 @@ function Game() {
           New Game
         </button>
 
-        {remainingTime === 0 ? (
-          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+        {!isStarted ? (
+          <button
+            className="bg-none max-xs:w-full inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-6 rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
+            onClick={handleStart}
+          >
+            Start
+          </button>
+        ) : remainingTime <= 0 && !isGameComplete ? (
+          <p
+            className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
+            onClick={resetGame}
+          >
             Oops! Time&#8217;s up, {user}.
           </p>
         ) : isGameComplete ? (
-          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+          <p
+            className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
+            onClick={resetGame}
+          >
             Yay! You won, {user}! 🎉
           </p>
         ) : (
