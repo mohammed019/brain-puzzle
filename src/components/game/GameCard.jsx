@@ -13,7 +13,7 @@ const GameCard = ({ card, handleChoice, flipped, disabled }) => {
     <div className="card" key={card.id}>
       <div className={flipped ? "flipped" : ""}>
         <LazyLoadImage
-          className="front p-[6px] sm:p-3 bg-accent-700 border-2 border-bg-light-700"
+          className="front mt-[6px] p-[6px] sm:p-3 bg-accent-700 border-2 border-bg-light-700"
           src={card.img}
           effect="opacity"
           alt="card front"
