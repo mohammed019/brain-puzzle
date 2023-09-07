@@ -1,11 +1,13 @@
 # Brain Puzzle
 
-Built with React and Tailwind CSS for efficient and flexible development of user interfaces.
+![preview](./public/preview.jpg)
 
-Supports both Kurdish and English languages, allowing players to choose their preferred language for gameplay.
+#### [Read In Kurdish](./READMEKU.md)
 
-Fully responsive design that adapts to different screen sizes and devices for an optimal user experience.
+## Features
 
-Dark and light mode options for a customizable and immersive gaming experience.
-
-Multiple difficulty levels to challenge players of all skill levels.
+- Built with React and Tailwind CSS for efficient and flexible development of user interfaces.
+- Supports both Kurdish and English languages, allowing players to choose their preferred language for gameplay.
+- Fully responsive design that adapts to different screen sizes and devices for an optimal user experience.
+- Dark and light mode options for a customizable and immersive gaming experience.
+- Multiple difficulty levels to challenge players of all skill levels.
