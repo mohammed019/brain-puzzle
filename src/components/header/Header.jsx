@@ -15,9 +15,9 @@ const Header = () => {
   return (
     <>
       <div className="max-w-5xl mx-auto flex justify-between items-center p-4 z-40 bg-bg-light-500 dark:bg-bg-dark-500 text-text-light-500 dark:text-text-dark-500 font-semibold">
-        <div className="text-2xl font-semibold max-sm:text-lg">
+        <a href="/" className="text-2xl font-semibold max-sm:text-lg">
           Brain Puzzle
-        </div>
+        </a>
 
         <div className="flex justify-center items-center space-x-6 max-sm:hidden">
           {isLogged && <Button title="Logout" handleClick={handleLogout} />}

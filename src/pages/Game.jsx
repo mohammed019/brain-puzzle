@@ -3,6 +3,9 @@ import { useGlobalAudioPlayer } from "react-use-audio-player";
 
 import GameCard from "../components/game/GameCard";
 import { getUsername } from "../hooks/auth";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { IoArrowBack } from "react-icons/io5";
 
 const cardImages = [
   { src: "/src/assets/Burger_Final.png", matched: false },
@@ -16,7 +19,10 @@ const cardImages = [
   { src: "/src/assets/Sandwich.png", matched: false },
 ];
 
-function Game() {
+const Game = () => {
+  const { gameDifficulty } = useParams();
+
+  const navigateTo = useNavigate();
   // card data
   const [cards, setCards] = useState([]);
 
@@ -30,10 +36,19 @@ function Game() {
 
   const { load } = useGlobalAudioPlayer();
 
-  const [remainingTime, setRemainingTime] = useState(60); // Start from 60 seconds (1 minute)
+  const [remainingTime, setRemainingTime] = useState(
+    gameDifficulty === "easy"
+      ? 120
+      : gameDifficulty === "medium"
+      ? 60
+      : gameDifficulty === "hard"
+      ? 40
+      : 120
+  ); // Start from 60 seconds (1 minute)
   const [isGameComplete, setIsGameComplete] = useState(false);
-  const [allMatched, setAllMatched] = useState(false);
+  const [isAllMatched, setIsAllMatched] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [winSound, setWinSound] = useState(false);
 
   // shuffle cards
   const shuffleCards = () => {
@@ -54,30 +69,47 @@ function Game() {
   }, []);
 
   useEffect(() => {
-    if (allMatched) {
+    if (isAllMatched) {
       // if all the matched true with map then setIsGame to true
       const allMatched = cards.every((card) => card.matched === true);
 
       if (allMatched) {
         setIsGameComplete(true);
-        load("/src/components/game/Win.mp3", {
-          autoplay: true,
-        });
+
+        if (!winSound) {
+          load("/src/components/game/Win.mp3", {
+            autoplay: true,
+          });
+
+          setWinSound(true);
+        }
       }
     }
 
     if (!isGameComplete && remainingTime === 0) {
       // Time is up sound
+      setDisabled(true);
       load("/src/components/game/Wasted.mp3", {
         autoplay: true,
       });
     }
-  }, [remainingTime]);
+  }, [remainingTime, isAllMatched, load, isGameComplete, cards]);
 
-  const resetGame = () => {
-    shuffleCards();
-    location.reload();
-  };
+  useEffect(() => {
+    if (isStarted) {
+      setDisabled(false);
+    } else if (!isStarted) {
+      setDisabled(true);
+    }
+  }, [isStarted]);
+
+  useEffect(() => {
+    if (isGameComplete) {
+      setDisabled(false);
+    } else if (!isGameComplete) {
+      setDisabled(true);
+    }
+  }, [isGameComplete]);
 
   useEffect(() => {
     if (isStarted) {
@@ -94,7 +126,7 @@ function Game() {
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
-      if (choiceOne.src === choiceTwo.src) {
+      if (choiceOne.src === choiceTwo.src && choiceOne.id !== choiceTwo.id) {
         setCards((prev) => {
           const updateCard = prev.map((card) => {
             if (card.src === choiceOne.src) {
@@ -103,7 +135,7 @@ function Game() {
               return card;
             }
           });
-          setAllMatched(updateCard);
+          setIsAllMatched(updateCard);
           return updateCard;
         });
         resetTurn();
@@ -115,10 +147,6 @@ function Game() {
     }
   }, [choiceOne, choiceTwo]);
 
-  // handle choice
-  const handleChoice = (card) => {
-    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
-  };
   useEffect(() => {
     const username = getUsername();
     setUser(username?.username);
@@ -130,46 +158,62 @@ function Game() {
     setDisabled(false);
   };
 
+  const resetGame = () => {
+    shuffleCards();
+    location.reload();
+  };
+
+  // handle choice
+  const handleChoice = (card) => {
+    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+  };
+
   const handleStart = () => {
     setIsStarted(true);
   };
 
   return (
     <div className="max-w-4xl max-md:max-w-[92%] flex flex-col justify-center items-center my-10 mx-auto ">
-      <div className="flex justify-center items-center w-full space-x-12">
-        <button
-          onClick={resetGame}
-          className="bg-none max-xs:w-full inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
-        >
-          New Game
-        </button>
+      <div className="flex justify-between max-sm:flex-col max-sm:space-y-6 sm:items-center w-full">
+        <IoArrowBack
+          className="h-8 w-8 cursor-pointer transition-all duration-200 ease-in-out hover:text-gray-400"
+          onClick={() => navigateTo("/")}
+        />
 
-        {!isStarted ? (
+        <div className="max-sm:flex max-sm:justify-between sm:space-x-6">
+          {!isStarted ? (
+            <button
+              className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-6 rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
+              onClick={handleStart}
+            >
+              Start
+            </button>
+          ) : remainingTime <= 0 && !isGameComplete ? (
+            <p
+              className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
+              onClick={resetGame}
+            >
+              Oops! Time&#8217;s up, {user}.
+            </p>
+          ) : isGameComplete ? (
+            <p
+              className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
+              onClick={resetGame}
+            >
+              Yay! You won, {user}! 🎉
+            </p>
+          ) : (
+            <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+              {remainingTime} secs left! Go, {user}! 💪
+            </p>
+          )}
           <button
-            className="bg-none max-xs:w-full inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-6 rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
-            onClick={handleStart}
+            onClick={resetGame}
+            className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
           >
-            Start
+            New Game
           </button>
-        ) : remainingTime <= 0 && !isGameComplete ? (
-          <p
-            className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
-            onClick={resetGame}
-          >
-            Oops! Time&#8217;s up, {user}.
-          </p>
-        ) : isGameComplete ? (
-          <p
-            className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
-            onClick={resetGame}
-          >
-            Yay! You won, {user}! 🎉
-          </p>
-        ) : (
-          <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
-            {remainingTime} secs left! Go, Mohammed! 💪
-          </p>
-        )}
+        </div>
       </div>
 
       <div className="mt-10 grid grid-cols-6 max-sm:grid-cols-4 gap-5">
@@ -187,6 +231,6 @@ function Game() {
       </div>
     </div>
   );
-}
+};
 
 export default Game;
