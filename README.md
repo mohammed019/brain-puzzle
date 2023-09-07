@@ -1,8 +1,11 @@
-# React + Vite
+# Brain Puzzle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Built with React and Tailwind CSS for efficient and flexible development of user interfaces.
 
-Currently, two official plugins are available:
+Supports both Kurdish and English languages, allowing players to choose their preferred language for gameplay.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Fully responsive design that adapts to different screen sizes and devices for an optimal user experience.
+
+Dark and light mode options for a customizable and immersive gaming experience.
+
+Multiple difficulty levels to challenge players of all skill levels.
