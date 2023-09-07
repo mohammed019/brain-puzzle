@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import {
   Navigate,
@@ -12,6 +12,7 @@ import "./index.css";
 import Login from "./pages/Login.jsx";
 import { isLoggedIn } from "./hooks/auth.js";
 import Game from "./pages/Game.jsx";
+import "./i18n.js";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Suspense fallback="Loading...">
+      <RouterProvider router={router} />
+    </Suspense>
   </React.StrictMode>
 );

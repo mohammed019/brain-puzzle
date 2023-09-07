@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
+import { useTranslation } from "react-i18next";
 
 import GameCard from "../components/game/GameCard";
 import { getUsername } from "../hooks/auth";
@@ -20,6 +21,7 @@ const cardImages = [
 ];
 
 const Game = () => {
+  const { t, i18n } = useTranslation();
   const { gameDifficulty } = useParams();
 
   const navigateTo = useNavigate();
@@ -104,14 +106,6 @@ const Game = () => {
   }, [isStarted]);
 
   useEffect(() => {
-    if (isGameComplete) {
-      setDisabled(false);
-    } else if (!isGameComplete) {
-      setDisabled(true);
-    }
-  }, [isGameComplete]);
-
-  useEffect(() => {
     if (isStarted) {
       const interval = setInterval(() => {
         setRemainingTime(remainingTime - 1);
@@ -173,45 +167,53 @@ const Game = () => {
   };
 
   return (
-    <div className="max-w-4xl max-md:max-w-[92%] flex flex-col justify-center items-center my-10 mx-auto ">
+    <div
+      dir={i18n.language === "ku" ? "rtl" : "ltr"}
+      className="max-w-4xl max-md:max-w-[92%] flex flex-col justify-center items-center my-10 mx-auto "
+    >
       <div className="flex justify-between max-sm:flex-col max-sm:space-y-6 sm:items-center w-full">
         <IoArrowBack
-          className="h-8 w-8 cursor-pointer transition-all duration-200 ease-in-out hover:text-gray-400"
+          className={`h-8 w-8 cursor-pointer transition-all duration-200 ease-in-out hover:text-gray-400 ${
+            i18n.language === "ku" ? "scale-x-[-1]" : ""
+          }`}
           onClick={() => navigateTo("/")}
         />
 
-        <div className="max-sm:flex max-sm:justify-between sm:space-x-6">
+        <div className="max-sm:flex max-sm:justify-between sm:space-x-6 rtl:space-x-reverse">
           {!isStarted ? (
             <button
-              className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-6 rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
+              className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-6 rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
               onClick={handleStart}
             >
-              Start
+              {t("Start")}
             </button>
           ) : remainingTime <= 0 && !isGameComplete ? (
             <p
-              className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
+              className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
               onClick={resetGame}
             >
-              Oops! Time&#8217;s up, {user}.
+              {t("Oops! Time&#8217;s up, {{user}}!", { user })}
             </p>
           ) : isGameComplete ? (
             <p
-              className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
+              className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
               onClick={resetGame}
             >
-              Yay! You won, {user}! 🎉
+              {t("Yay! You won, {{user}}! 🎉", { user })}
             </p>
           ) : (
-            <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
-              {remainingTime} secs left! Go, {user}! 💪
+            <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
+              {t("{{remainingTime}} secs left! Go, {{user}}! 💪", {
+                remainingTime,
+                user,
+              })}
             </p>
           )}
           <button
             onClick={resetGame}
-            className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer font-sans hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
+            className="bg-none inline-block border-2 text-center transition-all duration-200 ease-in-out py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700 border-primary-light-600 text-text-light-500 font-bold text-base"
           >
-            New Game
+            {t("New Game")}
           </button>
         </div>
       </div>

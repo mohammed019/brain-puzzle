@@ -1,7 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 /* eslint-disable react/prop-types */
 const Button = ({ title, className, disabled = false, handleClick }) => {
+  const { t } = useTranslation();
   return (
     <button
       type="button"
@@ -9,7 +11,7 @@ const Button = ({ title, className, disabled = false, handleClick }) => {
       disabled={disabled}
       onClick={handleClick}
     >
-      {title}
+      {t(title)}
     </button>
   );
 };
