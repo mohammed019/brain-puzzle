@@ -26,8 +26,8 @@ const resources = {
 
       "Oops! Time's up, {{user}}!": "ببوورە کات تەواو بوو, {{user}}!",
       "Yay! You won, {{user}}! 🎉": "بژی سەرکەوتوبوویت, {{user}}! 🎉",
-      "{{remainingTime}} secs left! Go, {{user}}! 💪":
-        "{{remainingTime}} چرکە کاتت ماووە! بەردەوام بە, {{user}}! 💪",
+      "{{remainingTime}} secs left! Go, {{user}}!":
+        "{{remainingTime}} چرکە کاتت ماووە! بەردەوام بە, {{user}}!",
     },
   },
 };
