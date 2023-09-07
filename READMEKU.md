@@ -1,6 +1,6 @@
 # مەتەڵی مێشک
 
-![preview](./public/preview.jpg)
+![preview](./public/previewKu.jpg)
 
 #### [بە ئینگلیزی بخوێنەوە](./READMEKU.md)
 
