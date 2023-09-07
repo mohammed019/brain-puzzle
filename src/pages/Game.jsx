@@ -9,15 +9,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
 const cardImages = [
-  { src: "/src/assets/Burger_Final.png", matched: false },
-  { src: "/src/assets//Donut.png", matched: false },
-  { src: "/src/assets/Drumstick.png", matched: false },
-  { src: "/src/assets/Fries.png", matched: false },
-  { src: "/src/assets/Glass_Drink.png", matched: false },
-  { src: "/src/assets/Hot Dog.png", matched: false },
-  { src: "/src/assets/Soda_Can.png", matched: false },
-  { src: "/src/assets/Soda_Cup.png", matched: false },
-  { src: "/src/assets/Sandwich.png", matched: false },
+  { src: "../assets/Burger_Final.png", matched: false },
+  { src: "../assets/Donut.png", matched: false },
+  { src: "../assets/Drumstick.png", matched: false },
+  { src: "../assets/Fries.png", matched: false },
+  { src: "../assets/Glass_Drink.png", matched: false },
+  { src: "../assets/Hot Dog.png", matched: false },
+  { src: "../assets/Soda_Can.png", matched: false },
+  { src: "../assets/Soda_Cup.png", matched: false },
+  { src: "../assets/Sandwich.png", matched: false },
 ];
 
 const Game = () => {
