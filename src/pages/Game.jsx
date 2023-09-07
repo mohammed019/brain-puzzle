@@ -165,7 +165,18 @@ const Game = () => {
 
   const resetGame = () => {
     shuffleCards();
-    location.reload();
+    setChoiceOne(null);
+    setChoiceTwo(null);
+    setRemainingTime(
+      gameDifficulty === "easy"
+        ? 120
+        : gameDifficulty === "medium"
+        ? 60
+        : gameDifficulty === "hard"
+        ? 40
+        : 120
+    );
+    setIsGameComplete(false);
   };
 
   // handle choice
