@@ -8,16 +8,27 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { IoArrowBack } from "react-icons/io5";
 
+// images
+import burger from "../assets/Burger_Final.png";
+import donut from "../assets/Donut.png";
+import drumstick from "../assets/Drumstick.png";
+import fries from "../assets/Fries.png";
+import Glass_Drink from "../assets/Glass_Drink.png";
+import dog from "../assets/Hot Dog.png";
+import soda_can from "../assets/Soda_Can.png";
+import soda_cup from "../assets/Soda_Cup.png";
+import sandwich from "../assets/Sandwich.png";
+
 const cardImages = [
-  { src: "../assets/Burger_Final.png", matched: false },
-  { src: "../assets/Donut.png", matched: false },
-  { src: "../assets/Drumstick.png", matched: false },
-  { src: "../assets/Fries.png", matched: false },
-  { src: "../assets/Glass_Drink.png", matched: false },
-  { src: "../assets/Hot Dog.png", matched: false },
-  { src: "../assets/Soda_Can.png", matched: false },
-  { src: "../assets/Soda_Cup.png", matched: false },
-  { src: "../assets/Sandwich.png", matched: false },
+  { src: "../assets/Burger_Final.png", img: burger, matched: false },
+  { src: "../assets/Donut.png", img: donut, matched: false },
+  { src: "../assets/Drumstick.png", img: drumstick, matched: false },
+  { src: "../assets/Fries.png", img: fries, matched: false },
+  { src: "../assets/Glass_Drink.png", img: Glass_Drink, matched: false },
+  { src: "../assets/Hot Dog.png", img: dog, matched: false },
+  { src: "../assets/Soda_Can.png", img: soda_can, matched: false },
+  { src: "../assets/Soda_Cup.png", img: soda_cup, matched: false },
+  { src: "../assets/Sandwich.png", img: sandwich, matched: false },
 ];
 
 const Game = () => {
@@ -192,7 +203,7 @@ const Game = () => {
               className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700"
               onClick={resetGame}
             >
-              {t("Oops! Time&#8217;s up, {{user}}!", { user })}
+              {t("Oops! Time's up, {{user}}!", { user })}
             </p>
           ) : isGameComplete ? (
             <p

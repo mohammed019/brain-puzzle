@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import cover from "../../assets/cover.png";
 import "./GameCard.css";
 
 const GameCard = ({ card, handleChoice, flipped, disabled }) => {
@@ -13,12 +13,12 @@ const GameCard = ({ card, handleChoice, flipped, disabled }) => {
       <div className={flipped ? "flipped" : ""}>
         <img
           className="front p-[6px] sm:p-3 bg-accent-700 border-2 border-bg-light-700"
-          src={card.src}
+          src={card.img}
           alt="card front"
         />
         <img
           className="back"
-          src="/src/assets/cover.png"
+          src={cover}
           onClick={handleClick}
           alt="card back"
         />
