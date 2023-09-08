@@ -19,7 +19,7 @@ const resources = {
 
       Easy: "ئاسان",
       Medium: "مامناوەند",
-      Hard: "قوڕس",
+      Hard: "قورس",
 
       "Enter Your Name": "ناوت بنووسە",
       Enter: "بڕۆ ژوورەوە",
@@ -37,7 +37,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "en",
+    fallbackLng: "ku",
     debug: false,
     interpolation: {
       escapeValue: false,

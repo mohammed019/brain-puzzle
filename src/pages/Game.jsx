@@ -9,26 +9,26 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
 // images
-import burger from "../assets/Burger_Final.png";
-import donut from "../assets/Donut.png";
-import drumstick from "../assets/Drumstick.png";
-import fries from "../assets/Fries.png";
-import Glass_Drink from "../assets/Glass_Drink.png";
-import dog from "../assets/Hot Dog.png";
-import soda_can from "../assets/Soda_Can.png";
-import soda_cup from "../assets/Soda_Cup.png";
-import sandwich from "../assets/Sandwich.png";
+import burger from "../assets/Burger_Final.webp";
+import donut from "../assets/Donut.webp";
+import drumstick from "../assets/Drumstick.webp";
+import fries from "../assets/Fries.webp";
+import Glass_Drink from "../assets/Glass_Drink.webp";
+import dog from "../assets/Hot Dog.webp";
+import soda_can from "../assets/Soda_Can.webp";
+import soda_cup from "../assets/Soda_Cup.webp";
+import sandwich from "../assets/Sandwich.webp";
 
 const cardImages = [
-  { src: "../assets/Burger_Final.png", img: burger, matched: false },
-  { src: "../assets/Donut.png", img: donut, matched: false },
-  { src: "../assets/Drumstick.png", img: drumstick, matched: false },
-  { src: "../assets/Fries.png", img: fries, matched: false },
-  { src: "../assets/Glass_Drink.png", img: Glass_Drink, matched: false },
-  { src: "../assets/Hot Dog.png", img: dog, matched: false },
-  { src: "../assets/Soda_Can.png", img: soda_can, matched: false },
-  { src: "../assets/Soda_Cup.png", img: soda_cup, matched: false },
-  { src: "../assets/Sandwich.png", img: sandwich, matched: false },
+  { src: "../assets/Burger_Final.webp", img: burger, matched: false },
+  { src: "../assets/Donut.webp", img: donut, matched: false },
+  { src: "../assets/Drumstick.webp", img: drumstick, matched: false },
+  { src: "../assets/Fries.webp", img: fries, matched: false },
+  { src: "../assets/Glass_Drink.webp", img: Glass_Drink, matched: false },
+  { src: "../assets/Hot Dog.webp", img: dog, matched: false },
+  { src: "../assets/Soda_Can.webp", img: soda_can, matched: false },
+  { src: "../assets/Soda_Cup.webp", img: soda_cup, matched: false },
+  { src: "../assets/Sandwich.webp", img: sandwich, matched: false },
 ];
 
 const Game = () => {
