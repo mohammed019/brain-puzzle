@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 
-import Header from "./components/header/Header.jsx";
+import Header from "./components/common/Header.jsx";
 import Difficulty from "./pages/Difficulty.jsx";
 import "./index.css";
 import Login from "./pages/Login.jsx";

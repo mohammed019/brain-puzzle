@@ -176,7 +176,6 @@ const Game = () => {
         ? 40
         : 120
     );
-    setDisabled(false);
     setIsStarted(false);
     setIsGameComplete(false);
   };
