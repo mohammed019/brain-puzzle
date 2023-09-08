@@ -227,7 +227,7 @@ const Game = () => {
             </p>
           ) : (
             <p className="bg-none font-bold text-base inline-block border-2 text-center transition-all duration-200 ease-in-out border-primary-light-600 py-[6px] px-[12px] rounded-[4px] dark:text-text-dark-500 hover:text-text-dark-500 cursor-pointer hover:bg-primary-light-500 dark:hover:bg-primary-light-700">
-              {t("{{remainingTime}} secs left! Go, {{user}}! 💪", {
+              {t("{{remainingTime}} secs left! Go, {{user}}!", {
                 remainingTime,
                 user,
               })}
